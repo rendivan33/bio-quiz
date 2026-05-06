@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Липопротеины — Тест</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;
+  background:linear-gradient(160deg,#0c1220,#1a1a2e 50%,#16213e);
+  font-family:'Nunito','Segoe UI',sans-serif;
+  color:#e2e8f0;
+  padding:20px 16px 40px;
+  display:flex;flex-direction:column;align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.hidden{display:none!important}
+
+/* Intro */
+.intro{margin-top:60px;text-align:center;max-width:400px;animation:fadeUp .6s ease}
+.intro-emoji{font-size:64px;margin-bottom:12px}
+.intro h1{
+  font-size:24px;font-weight:800;margin-bottom:8px;
+  background:linear-gradient(135deg,#f0abfc,#818cf8,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.intro-sub{font-size:14px;color:#94a3b8;margin-bottom:20px}
+.intro-desc{font-size:15px;line-height:1.6;color:#cbd5e1;margin-bottom:28px;padding:0 8px}
+
+/* Buttons */
+.btn-primary{
+  padding:14px 40px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#818cf8,#6366f1);
+  color:#fff;font-size:16px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px rgba(99,102,241,.4);
+  transition:transform .15s;
+}
+.btn-primary:active{transform:scale(.96)}
+.btn-next{
+  padding:14px 48px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+  color:#fff;font-size:15px;font-weight:700;cursor:pointer;
+  transition:transform .15s;
+}
+.btn-next:active{transform:scale(.96)}
+.btn-disabled{opacity:.4;pointer-events:none}
+
+/* Top bar */
+.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:500px;margin-bottom:8px}
+.counter{font-size:13px;color:#94a3b8;font-weight:600}
+.score-tag{
+  font-size:13px;color:#4ade80;font-weight:700;
+  background:rgba(34,197,94,.12);padding:4px 12px;border-radius:20px;
+}
+.progress-track{
+  width:100%;max-width:500px;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.08);margin-bottom:20px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,#818cf8,#38bdf8);
+  transition:width .5s ease;
+}
+
+/* Question */
+.q-card{
+  width:100%;max-width:500px;
+  background:rgba(255,255,255,.04);border-radius:16px;
+  padding:24px 20px;margin-bottom:16px;
+  border:1px solid rgba(255,255,255,.06);
+  animation:fadeUp .4s ease;
+}
+.q-text{font-size:17px;font-weight:600;line-height:1.5;text-align:center}
+
+/* Options */
+.opts{width:100%;max-width:500px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.opt-btn{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:12px;
+  font-size:15px;font-weight:500;cursor:pointer;
+  text-align:left;line-height:1.4;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  color:#e2e8f0;transition:all .2s;
+  font-family:inherit;
+}
+.opt-btn:active{transform:scale(.98)}
+.opt-letter{
+  flex-shrink:0;width:28px;height:28px;border-radius:8px;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#94a3b8;
+}
+.opt-selected{background:rgba(99,102,241,.2);border:2px solid #818cf8;color:#c7d2fe}
+.opt-correct{background:rgba(34,197,94,.15)!important;border:2px solid #22c55e!important;color:#4ade80!important}
+.opt-wrong{background:rgba(239,68,68,.15)!important;border:2px solid #ef4444!important;color:#f87171!important}
+
+/* Feedback */
+.feedback{
+  width:100%;max-width:500px;
+  padding:12px 16px;border-radius:12px;
+  border:1px solid;font-size:14px;font-weight:600;
+  text-align:center;margin-bottom:16px;line-height:1.5;
+  animation:fadeUp .3s ease;
+}
+.fb-correct{background:rgba(34,197,94,.1);border-color:#22c55e;color:#4ade80}
+.fb-wrong{background:rgba(239,68,68,.1);border-color:#ef4444;color:#f87171}
+
+.action-row{width:100%;max-width:500px;display:flex;justify-content:center}
+
+/* Results */
+.results{
+  margin-top:30px;text-align:center;max-width:460px;width:100%;
+  background:rgba(255,255,255,.03);border-radius:20px;
+  padding:36px 24px;border:1px solid rgba(255,255,255,.06);
+  animation:fadeUp .6s ease;
+}
+.results-emoji{font-size:56px;margin-bottom:8px}
+.results h2{font-size:32px;font-weight:800;margin-bottom:16px}
+.pct-bar{
+  width:100%;height:8px;border-radius:4px;
+  background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:8px;
+}
+.pct-fill{
+  height:100%;border-radius:4px;
+  background:linear-gradient(90deg,#f0abfc,#818cf8,#38bdf8);
+  transition:width .8s ease;
+}
+.pct-text{font-size:14px;color:#94a3b8;margin-bottom:8px}
+.results-msg{font-size:16px;color:#cbd5e1;margin-bottom:24px;line-height:1.5}
+
+.review-title{
+  font-size:15px;font-weight:700;color:#94a3b8;
+  margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;
+  text-align:left;
+}
+.no-errors{font-size:15px;color:#4ade80;font-weight:600;margin-bottom:20px}
+.review-item{
+  background:rgba(255,255,255,.04);border-radius:12px;
+  padding:12px 14px;margin-bottom:10px;
+  border:1px solid rgba(255,255,255,.06);text-align:left;
+}
+.review-q{font-size:14px;font-weight:600;margin-bottom:8px;line-height:1.4}
+.review-wrong{font-size:13px;color:#f87171;margin-bottom:4px}
+.review-right{font-size:13px;color:#4ade80}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="intro">
+  <div class="intro-emoji">🧬</div>
+  <h1>Липопротеины и Атеросклероз</h1>
+  <p class="intro-sub">Мини-тест · 15 вопросов · ~5 минут</p>
+  <div class="intro-desc">Проверь, как хорошо ты разобралась в липопротеинах, их метаболизме, атеросклерозе и лечении. Удачи! 💪</div>
+  <button class="btn-primary" onclick="startQuiz()">Начать тест</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="hidden" style="width:100%;display:flex;flex-direction:column;align-items:center">
+  <div class="top-bar">
+    <span class="counter" id="counter"></span>
+    <span class="score-tag" id="scoreTag">✓ 0</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="q-card" id="qCard"><p class="q-text" id="qText"></p></div>
+  <div class="opts" id="opts"></div>
+  <div id="feedbackWrap"></div>
+  <div class="action-row" id="actionRow"></div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="hidden results"></div>
+
+<script>
+const pool=[
+{q:"Какой липопротеин транспортирует экзогенные ТАГ от кишечника к тканям?",o:["ЛПОНП","Хиломикроны","ЛПНП","ЛПВП"],c:1},
+{q:"Какой апобелок активирует липопротеинлипазу (ЛПЛ)?",o:["апоВ-100","апоА-I","апоС-II","апоЕ"],c:2},
+{q:"Какой класс липопротеинов осуществляет обратный транспорт холестерола в печень?",o:["ЛПНП","ЛПОНП","Хиломикроны","ЛПВП"],c:3},
+{q:"Что является основным липидным компонентом ЛПНП?",o:["ТАГ","Фосфолипиды","Эфиры холестерола","Свободные жирные кислоты"],c:2},
+{q:"Какой фермент этерифицирует холестерол на поверхности ЛПВП?",o:["ЛПЛ","АХАТ","ЛХАТ","CETP"],c:2},
+{q:"В каком ряду плотность липопротеинов возрастает?",o:["ЛПВП → ЛПНП → ЛПОНП → ХМ","ХМ → ЛПОНП → ЛППП → ЛПНП → ЛПВП","ЛПНП → ЛПВП → ЛПОНП → ХМ","ЛПОНП → ХМ → ЛПНП → ЛПВП"],c:1},
+{q:"Какой белок переносит эфиры холестерола от ЛПВП на другие липопротеины в обмен на ТАГ?",o:["PLTP","MTP","CETP","NPC1"],c:2},
+{q:"Единственный апобелок в составе ЛПНП — это:",o:["апоА-I","апоС-II","апоЕ","апоВ-100"],c:3},
+{q:"Через какой рецептор макрофаги захватывают модифицированные ЛПНП (нерегулируемо)?",o:["LDL-R","SR-A1","ABCA1","SR-B1"],c:1},
+{q:"Что образуется при нерегулируемом захвате модифицированных ЛПНП макрофагами?",o:["Ремнантные частицы","Пенистые клетки","Тельца Хайнца","Липидные мицеллы"],c:1},
+{q:"Какой мембранный белок клеток «представляет» холестерол для ЛПВП?",o:["LDL-R","ГлюТ-4","ABCA1","апоВ-48"],c:2},
+{q:"Статины снижают уровень холестерола, ингибируя:",o:["Липопротеинлипазу","ЛХАТ","ГМГ-КоА-редуктазу","CETP"],c:2},
+{q:"Семейная гиперхолестеролемия (тип IIa) вызвана мутацией гена:",o:["апоС-II","ЛПЛ","LDL-R","апоЕ"],c:2},
+{q:"Какой липопротеин называют «атерогенным»?",o:["ЛПВП","Хиломикроны","ЛПНП","ЛППП"],c:2},
+{q:"Ремнантные хиломикроны захватываются печенью через связывание с рецептором посредством:",o:["апоВ-48","апоС-II","апоА-I","апоЕ"],c:3},
+{q:"Где синтезируются ЛПОНП?",o:["В кишечнике","В печени","В жировой ткани","В надпочечниках"],c:1},
+{q:"Какой путь доставки ХС от ЛПВП в печень НЕ требует эндоцитоза?",o:["Через LDL-R","Через LRP","Через SR-B1","Через апоВ-48 рецептор"],c:2},
+{q:"Фибраты снижают уровень липидов за счёт:",o:["Ингибирования ГМГ-КоА-редуктазы","Блокирования всасывания ХС","Увеличения активности ЛПЛ","Подавления секреции желчи"],c:2},
+{q:"Какой тип модификации ЛПНП характерен для курильщиков (через цианиды)?",o:["Гликозилирование","Окисление","Карбамилирование","Фосфорилирование"],c:2},
+{q:"Период полужизни ЛПВП составляет примерно:",o:["1 час","3 часа","2–4 дня","5 дней"],c:3},
+];
+
+let questions,idx,selected,confirmed,score,answers;
+const letters=["А","Б","В","Г"];
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+function startQuiz(){
+  questions=shuffle(pool).slice(0,15);
+  idx=0;selected=null;confirmed=false;score=0;answers=[];
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("results").classList.add("hidden");
+  const qz=document.getElementById("quiz");
+  qz.classList.remove("hidden");
+  qz.style.display="flex";
+  render();
+}
+
+function render(){
+  const cur=questions[idx];
+  const total=questions.length;
+  document.getElementById("counter").textContent=(idx+1)+" / "+total;
+  document.getElementById("scoreTag").textContent="✓ "+score;
+  document.getElementById("progressFill").style.width=((idx+1)/total*100)+"%";
+  document.getElementById("qText").textContent=cur.q;
+  document.getElementById("qCard").style.animation="none";
+  void document.getElementById("qCard").offsetHeight;
+  document.getElementById("qCard").style.animation="fadeUp .4s ease";
+
+  const optsEl=document.getElementById("opts");
+  optsEl.innerHTML="";
+  cur.o.forEach((opt,i)=>{
+    const btn=document.createElement("button");
+    btn.className="opt-btn";
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+"</span>"+opt;
+    btn.onclick=()=>selectOpt(i);
+    optsEl.appendChild(btn);
+  });
+
+  document.getElementById("feedbackWrap").innerHTML="";
+  const ar=document.getElementById("actionRow");
+  ar.innerHTML='<button class="btn-primary btn-disabled" id="confirmBtn" onclick="confirmAnswer()">Ответить</button>';
+}
+
+function selectOpt(i){
+  if(confirmed)return;
+  selected=i;
+  const btns=document.querySelectorAll(".opt-btn");
+  btns.forEach((b,j)=>{
+    b.className=j===i?"opt-btn opt-selected":"opt-btn";
+  });
+  document.getElementById("confirmBtn").classList.remove("btn-disabled");
+}
+
+function confirmAnswer(){
+  if(selected===null||confirmed)return;
+  confirmed=true;
+  const cur=questions[idx];
+  const isCorrect=selected===cur.c;
+  if(isCorrect)score++;
+  answers.push({q:cur.q,picked:selected,correct:cur.c,opts:cur.o});
+
+  document.getElementById("scoreTag").textContent="✓ "+score;
+
+  const btns=document.querySelectorAll(".opt-btn");
+  btns.forEach((b,j)=>{
+    b.style.pointerEvents="none";
+    if(j===cur.c)b.className="opt-btn opt-correct";
+    else if(j===selected&&!isCorrect)b.className="opt-btn opt-wrong";
+  });
+
+  const fw=document.getElementById("feedbackWrap");
+  if(isCorrect){
+    fw.innerHTML='<div class="feedback fb-correct" style="animation:fadeUp .3s ease">Правильно! ✨</div>';
+  }else{
+    fw.innerHTML='<div class="feedback fb-wrong" style="animation:fadeUp .3s ease">Неверно. Правильный ответ: '+cur.o[cur.c]+'</div>';
+  }
+
+  const ar=document.getElementById("actionRow");
+  const label=idx+1>=questions.length?"Результаты":"Далее →";
+  ar.innerHTML='<button class="btn-next" onclick="nextQ()">'+label+'</button>';
+}
+
+function nextQ(){
+  if(idx+1>=questions.length){showResults();return}
+  idx++;selected=null;confirmed=false;
+  render();
+}
+
+function showResults(){
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("quiz").style.display="none";
+  const r=document.getElementById("results");
+  r.classList.remove("hidden");
+
+  const total=questions.length;
+  const pct=Math.round(score/total*100);
+  const emoji=pct>=90?"🏆":pct>=70?"🎉":pct>=50?"💪":"📚";
+  const msg=pct>=90?"Отлично! Ты прекрасно знаешь материал!":pct>=70?"Хороший результат! Осталось подтянуть детали.":pct>=50?"Неплохо, но стоит повторить некоторые темы.":"Нужно ещё поучить — пересмотри карточки!";
+
+  const wrongs=answers.filter(a=>a.picked!==a.correct);
+  let reviewHTML="";
+  if(wrongs.length===0){
+    reviewHTML='<p class="no-errors">Ошибок нет — идеально! ✨</p>';
+  }else{
+    reviewHTML=wrongs.map(a=>
+      '<div class="review-item"><div class="review-q">'+a.q+'</div><div class="review-wrong">✗ '+a.opts[a.picked]+'</div><div class="review-right">✓ '+a.opts[a.correct]+'</div></div>'
+    ).join("");
+  }
+
+  r.innerHTML=`
+    <div class="results-emoji">${emoji}</div>
+    <h2>${score} из ${total}</h2>
+    <div class="pct-bar"><div class="pct-fill" id="resPctFill" style="width:0%"></div></div>
+    <p class="pct-text">${pct}% правильных</p>
+    <p class="results-msg">${msg}</p>
+    <div style="text-align:left"><h3 class="review-title">Разбор ошибок</h3>${reviewHTML}</div>
+    <button class="btn-primary" onclick="startQuiz()" style="margin-top:20px">Пройти заново</button>
+  `;
+  setTimeout(()=>{const f=document.getElementById("resPctFill");if(f)f.style.width=pct+"%"},100);
+}
+</script>
+</body>
+</html>
